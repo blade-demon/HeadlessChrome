@@ -25,7 +25,7 @@ const uri = "https://weibo.com/login.php";
 
 (async () => {
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(60 * 1000);
     await page.setViewport({ width: 1600, height: 0 });
