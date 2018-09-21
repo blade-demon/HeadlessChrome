@@ -1,6 +1,4 @@
 const puppeteer = require("puppeteer");
-const request = require("superagent");
-const fs = require("fs");
 
 const USERNAME_SELECTOR = "input#loginname";
 const PASSWORD_SELECTOR = "input[name='password']";
@@ -8,6 +6,7 @@ const LOGINBTN_SELECTOR = ".info_list.login_btn";
 
 // 数据概览按钮
 const DETAIL_BUTTON_SELECTOR = "ul.main-nav li:nth-child(1)";
+const MORE_BUTTON_SELECTOR = ".card div.ft.unexpand";
 // 粉丝分析
 const FANS_BUTTON_SELECTOR = "ul.main-nav li:nth-child(2)";
 // 博文分析
@@ -22,74 +21,104 @@ const CREDS = {
   password: "gamepoch2016"
 };
 
-const uri = "https://weibo.com/";
+const uri = "https://weibo.com/login.php";
 
 (async () => {
+  const browser = await puppeteer.launch({ headless: false });
   try {
-    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(60 * 1000);
     await page.setViewport({ width: 1600, height: 0 });
     await page.goto(uri);
 
     await page.waitFor(USERNAME_SELECTOR);
+    await page.waitFor(3 * 1000);
     await page.type(USERNAME_SELECTOR, CREDS.username);
     await page.type(PASSWORD_SELECTOR, CREDS.password);
     await page.click(LOGINBTN_SELECTOR);
     await page.waitFor(10 * 1000);
 
     // 详细数据iframe页面
-    await page.goto(
-      "https://weibo.com/p/1006065864259588/manage?iframe_url=%2F%2Fdss.sc.weibo.com%3Fsjzs%3Dzhongxin#place"
-    );
-    let iframe = await page
-      .frames()
-      .find(f => f.name().includes("rightiframe"));
+    await page.goto("https://dss.sc.weibo.com/pc/index");
+    // let iframe = await page
+    //   .frames()
+    //   .find(f => f.name().includes("rightiframe"));
+    await page.waitFor(10 * 1000);
+    const extendButton = await page.$(MORE_BUTTON_SELECTOR);
+    const fansButton = await page.$(FANS_BUTTON_SELECTOR);
+    const blogDetailButton = await page.$(BLOGDETAIL_BUTTON_SELECTOR);
+    const interactButton = await page.$(INTERACT_BUTTON_SELECTOR);
+    const articleButton = await page.$(ARTICLE_BUTTON_SELECTOR);
 
-    const fansButton = await iframe.$(FANS_BUTTON_SELECTOR);
-    const blogDetailButton = await iframe.$(BLOGDETAIL_BUTTON_SELECTOR);
-    const interactButton = await iframe.$(INTERACT_BUTTON_SELECTOR);
-    const articleButton = await iframe.$(ARTICLE_BUTTON_SELECTOR);
-
-    // 获得微博数据的截屏
-    await blogDetailButton.click();
+    // console.log(extendButton);
+    // 1. 获得数据概览的截屏
+    await extendButton.click();
     await page.waitFor(10 * 1000);
     await page.screenshot({
-      fullPage: true,
-      path: "./blog-detail.png"
+      clip: {
+        x: 400,
+        y: 0,
+        width: 800,
+        height: 2000
+      },
+      path: "./head.png"
     });
 
-    // 获得粉丝数据的截屏
+    // 2. 获得粉丝分析的截屏
     await fansButton.click();
     await page.waitFor(10 * 1000);
     await page.screenshot({
-      fullPage: true,
+      clip: {
+        x: 400,
+        y: 0,
+        width: 800,
+        height: 2000
+      },
       path: "./fans.png"
     });
 
-    // 获得微博互动数据的截屏
+    // 3. 获得微博分析数据的截屏
+    await blogDetailButton.click();
+    await page.waitFor(10 * 1000);
+    await page.screenshot({
+      clip: {
+        x: 400,
+        y: 0,
+        width: 800,
+        height: 2000
+      },
+      path: "./blog.png"
+    });
+
+    // 4. 获得互动分析的截屏
     await interactButton.click();
     await page.waitFor(10 * 1000);
     await page.screenshot({
-      fullPage: true,
+      clip: {
+        x: 400,
+        y: 0,
+        width: 800,
+        height: 2000
+      },
       path: "./interact.png"
     });
 
-    // 获得文章数据的截屏
+    // 获得文章分析的截屏
     await articleButton.click();
     await page.waitFor(10 * 1000);
     await page.screenshot({
-      fullPage: true,
-      path: "./blog-detail.png"
+      clip: {
+        x: 400,
+        y: 0,
+        width: 800,
+        height: 2000
+      },
+      path: "./article.png"
     });
 
     await browser.close();
     console.log("获取数据成功");
     process.exit(0);
-    // await page.waitFor(10 * 1000);
-    // await page.screenshot({ fullPage: true, path: "./screen.png" });
-    // await page.waitFor(10 * 1000);
-    // await page.click(BLOGDETAIL_SELECTOR);
   } catch (error) {
     console.log(String(error));
     await browser.close();
