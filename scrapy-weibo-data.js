@@ -16,28 +16,26 @@ const INTERACT_BUTTON_SELECTOR = "ul.main-nav li:nth-child(4)";
 // 文章分析
 const ARTICLE_BUTTON_SELECTOR = "ul.main-nav li:nth-child(6)";
 
-const CREDS = {
-  username: "bobo@gamepoch.com",
-  password: "gamepoch2016"
-};
+const CREDS = require("./creds").weibo;
 
 const uri = "https://weibo.com/login.php";
 
 (async () => {
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
   try {
-    const browser = await puppeteer.launch({ headless: true });
-    const page = await browser.newPage();
     page.setDefaultNavigationTimeout(60 * 1000);
     await page.setViewport({ width: 1600, height: 0 });
     await page.goto(uri);
 
     await page.waitFor(USERNAME_SELECTOR);
-    await page.waitFor(3 * 1000);
+    await page.waitFor(5 * 1000);
     await page.type(USERNAME_SELECTOR, CREDS.username);
     await page.type(PASSWORD_SELECTOR, CREDS.password);
     await page.click(LOGINBTN_SELECTOR);
     await page.waitFor(10 * 1000);
-
+    // await page.click(LOGINBTN_SELECTOR);
+    // await page.waitFor(3 * 1000);
     // 详细数据iframe页面
     await page.goto("https://dss.sc.weibo.com/pc/index");
     // let iframe = await page
