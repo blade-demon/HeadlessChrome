@@ -59,7 +59,7 @@ const uri = "https://weibo.com/login.php";
         width: 800,
         height: 2000
       },
-      path: "./head.png"
+      path: "./tmp/weibo/head.png"
     });
 
     // 2. 获得粉丝分析的截屏
@@ -72,7 +72,7 @@ const uri = "https://weibo.com/login.php";
         width: 800,
         height: 2000
       },
-      path: "./fans.png"
+      path: "./tmp/weibo/fans.png"
     });
 
     // 3. 获得微博分析数据的截屏
@@ -85,7 +85,7 @@ const uri = "https://weibo.com/login.php";
         width: 800,
         height: 2000
       },
-      path: "./blog.png"
+      path: "./tmp/weibo/blog.png"
     });
 
     // 4. 获得互动分析的截屏
@@ -98,7 +98,7 @@ const uri = "https://weibo.com/login.php";
         width: 800,
         height: 2000
       },
-      path: "./interact.png"
+      path: "./tmp/weibo/interact.png"
     });
 
     // 获得文章分析的截屏
@@ -111,7 +111,7 @@ const uri = "https://weibo.com/login.php";
         width: 800,
         height: 2000
       },
-      path: "./article.png"
+      path: "./tmp/weibo/article.png"
     });
 
     await browser.close();

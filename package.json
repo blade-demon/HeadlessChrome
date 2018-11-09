@@ -15,7 +15,7 @@
     "inquirer": "^6.0.0",
     "nodejieba": "^2.2.6",
     "nodemon": "^1.17.3",
-    "puppeteer": "^1.8.0",
+    "puppeteer": "^1.10.0",
     "superagent": "^3.8.2",
     "term-img": "^2.1.0",
     "terminal-image": "^0.1.1",
