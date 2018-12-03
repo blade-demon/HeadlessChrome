@@ -12,10 +12,13 @@
   "dependencies": {
     "axios": "^0.18.0",
     "baidu-ocr-api": "^2.0.5",
+    "form-data": "^2.3.3",
     "inquirer": "^6.0.0",
     "nodejieba": "^2.2.6",
     "nodemon": "^1.17.3",
     "puppeteer": "^1.10.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
     "superagent": "^3.8.2",
     "term-img": "^2.1.0",
     "terminal-image": "^0.1.1",
