@@ -53,12 +53,15 @@ const { douyin, captcha } = require("./creds");
         if (page.url() === uri) {
           code = "";
           // 清空输入框
-          // await page.click(CAPTCHAINPUT_SELECTOR, { clickCount: 3 });
-          // await page.keyboard.press("Backspace");
+          await page.click(CAPTCHAINPUT_SELECTOR, { clickCount: 3 });
+          await page.keyboard.press("Backspace");
           // 重新获得验证码图片
           await getScreenshot(page);
         } else {
           console.log("验证码获取并且验证成功！");
+
+          // 开始获取数据
+          await startGetData(page);
         }
       } else {
         await page.click(".captcha-wrap");
@@ -73,6 +76,56 @@ const { douyin, captcha } = require("./creds");
     // process.exit(-1);
   }
 })();
+
+async function startGetData(page) {
+  await page.goto("https://mp.toutiao.com/profile_v3/douyin/data-analysis");
+
+  // 1. 核心运营数据
+  await page.waitForSelector(".tui-tabs");
+  await page.waitFor(3000);
+  // await page.waitForNavigation({ waitUntil: "domcontentloaded" });
+  await page.screenshot({
+    clip: {
+      x: 400,
+      y: 0,
+      width: 1000,
+      height: 2000
+    },
+    path: "./tmp/douyin/screenshots/data-analysis.png"
+  });
+
+  // 2. 视频互动数据
+  await page.waitForSelector(".pgc-title-tab");
+  await page.click(
+    ".tui-tabs:nth-child(1) .pgc-title .pgc-title-tab:nth-child(3)"
+  );
+
+  await page.waitFor(3000);
+  // await page.waitForNavigation({ waitUntil: "domcontentloaded" });
+  await page.screenshot({
+    clip: {
+      x: 400,
+      y: 0,
+      width: 1000,
+      height: 2000
+    },
+    path: "./tmp/douyin/screenshots/data-analysis-video.png"
+  });
+
+  // 3. 内容管理
+  page.goto("https://mp.toutiao.com/profile_v3/douyin/content-manage");
+  await page.waitForSelector(".content");
+  await page.waitFor(3000);
+  await page.screenshot({
+    clip: {
+      x: 400,
+      y: 0,
+      width: 1000,
+      height: 2000
+    },
+    path: "./tmp/douyin/screenshots/data-analysis-content-manage.png"
+  });
+}
 
 async function startGetCode() {
   return new Promise(async resolve => {
