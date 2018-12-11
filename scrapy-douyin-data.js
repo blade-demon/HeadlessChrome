@@ -94,6 +94,8 @@ async function startGetData(page) {
     path: "./tmp/douyin/screenshots/data-analysis.png"
   });
 
+  console.log("获得核心运营数据");
+
   // 2. 视频互动数据
   await page.waitForSelector(".pgc-title-tab");
   await page.click(
@@ -112,6 +114,8 @@ async function startGetData(page) {
     path: "./tmp/douyin/screenshots/data-analysis-video.png"
   });
 
+  console.log("获得视频互动数据");
+
   // 3. 内容管理
   page.goto("https://mp.toutiao.com/profile_v3/douyin/content-manage");
   await page.waitForSelector(".content");
@@ -125,6 +129,9 @@ async function startGetData(page) {
     },
     path: "./tmp/douyin/screenshots/data-analysis-content-manage.png"
   });
+
+  console.log("完成数据收集");
+  process.exit(0);
 }
 
 async function startGetCode() {
